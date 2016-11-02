@@ -143,11 +143,7 @@ Placetobe Investor Quickscan
 
         <footer>
 
-          <placetobe-button
-              hidden$="[[_scoreIsLessThan(score, 10)]]"
-              title="Meld je aan als investeerder"
-              href="/investeren/aanmelden"
-          ><span>Meld je aan als investeerder</span></placetobe-button>
+          <slot name="action"></slot>
 
           <placetobe-button
               id="try-again-button"
