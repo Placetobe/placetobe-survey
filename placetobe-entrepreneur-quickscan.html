@@ -184,18 +184,19 @@ Placetobe Entrepreneur Quickscan
 
         currentStep: {
           type: Number,
-          computed: "_computeStep(currentIndex)"
+          computed: "_computeStep(currentIndex)",
+          observer: "_handleCurrentStepChanged"
         },
 
         finished: {
           type: Boolean,
-          computed: "_computeFinished(answers.*, numberOfQuestions, currentIndex)"
+          computed: "_computeFinished(answers.*, numberOfQuestions, currentIndex)",
+          observer: "_handleFinishedChanged"          
         },
 
         answerText: {
           type: String,
           computed: "_computeAnswerText(scores.*)",
-          // observer: '_answerTextChanged'
         },
 
         scores: {
@@ -211,7 +212,6 @@ Placetobe Entrepreneur Quickscan
         resultHeading: {
           type: String,
           computed: '_computeResultHeading(scores.*)',
-          // observer: '_resultHeadingChanged'
         }
 
       },
@@ -306,12 +306,19 @@ Placetobe Entrepreneur Quickscan
         return answerText.join(' ');
       },
 
-      _resultHeadingChanged: function(resultHeading) {
-        console.log('_resultHeadingChanged', resultHeading);
+      _handleCurrentStepChanged: function(currentStep) {
+        if(this.currentIndex === 0) return;
+        this.fire('question-answered', {
+          question: this.currentIndex,
+          score: parseInt(this.scores[this.currentIndex-1])
+        })
       },
 
-      _answerTextChanged: function(answerText) {
-        console.log('_answerTextChanged', answerText);        
+      _handleFinishedChanged: function(finished) {
+        if(!finished) return;
+        this.fire('finished', {
+          totalScore: this.totalScore
+        })
       }
 
     });

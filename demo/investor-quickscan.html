@@ -32,9 +32,21 @@
     <div class="vertical-section-container centered">
       <h3>Basic placetobe-investor-quickscan Demo</h3>
       <demo-snippet>
-        <template>
-          <placetobe-investor-quickscan></placetobe-investor-quickscan>
+        <template is="dom-bind">
+          <placetobe-investor-quickscan
+            on-question-answered="_handleQuestionAnswered"
+            on-finished="_handleFinished"
+          ></placetobe-investor-quickscan>
         </template>
+        <script>
+          document.querySelector('template')._handleQuestionAnswered = function(evt) {
+            console.info('answered question', evt.detail)
+          }
+
+          document.querySelector('template')._handleFinished = function(evt) {
+            console.info('finished', evt.detail)
+          }
+        </script>
       </demo-snippet>
     </div>
 

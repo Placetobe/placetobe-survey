@@ -186,12 +186,14 @@ Placetobe Investor Quickscan
 
         currentStep: {
             type: Number,
-            computed: "_computeStep(currentIndex)"
+            computed: "_computeStep(currentIndex)",
+            observer: "_handleCurrentStepChanged"
         },
 
         finished: {
             type: Boolean,
-            computed: "_computeFinished(answers.*, numberOfQuestions, currentIndex)"
+            computed: "_computeFinished(answers.*, numberOfQuestions, currentIndex)",
+            observer: "_handleFinishedChanged"
         },
 
         answerText: {
@@ -342,6 +344,20 @@ Placetobe Investor Quickscan
         }
       },
 
+      _handleCurrentStepChanged: function(currentStep) {
+        if(this.currentIndex === 0) return;
+        this.fire('question-answered', {
+          question: this.currentIndex,
+          score: parseInt(this.answers[this.currentIndex-1])
+        })
+      },
+
+      _handleFinishedChanged: function(finished) {
+        if(!finished) return;
+        this.fire('finished', {
+          totalScore: this.score
+        })
+      }
 
     });
   </script>
